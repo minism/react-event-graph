@@ -73,6 +73,7 @@ export class EventGraphNode implements ISubgraphChangedListener {
   public child(name: string) {
     const node = new EventGraphNode(this, name);
     this.children.push(node);
+    this.notify();
     return node;
   }
 

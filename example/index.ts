@@ -1,12 +1,11 @@
 import { EventGraphLogger, logMethod } from "@react-event-graph/logger";
 import Controller from "./controller";
 import { sleep } from "./util";
+import logger from "./logger";
 
 async function asyncBareFunction(seconds: number) {
   await sleep(seconds);
 }
-
-const logger = new EventGraphLogger();
 
 // Render the graph whenever it changes.
 logger.addListener((graph) => {
@@ -23,8 +22,10 @@ async function main() {
   // await call2;
 
   const controller = new Controller();
-  const result = await controller.asyncMethod(0.5);
-  console.log(result);
+  const result = await Promise.all([
+    controller.asyncMethod1(0.5),
+    controller.asyncMethod2AutomaticName(1),
+  ]);
 }
 
 main().catch(console.error);

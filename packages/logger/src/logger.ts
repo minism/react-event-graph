@@ -72,22 +72,42 @@ export function logMethod(eventName?: string) {
   };
 }
 
-function instrumentMethod(eventName: string, func: Function) {
-  return function (...args: any[]) {
-    console.log(eventName);
-    return func(...args);
+function instrumentMethod(
+  eventName: string,
+  func: Function,
+  logger: EventGraphLogger
+) {
+  return function (this: any, ...args: any[]) {
+    const ctx = args[args.length - 1];
+    let child: EventGraphNode;
+    if (typeof ctx == "object" && ctx instanceof EventGraphNode) {
+      args.pop();
+      child = ctx.child(eventName);
+    } else {
+      child = logger.root(eventName);
+    }
+    return func.call(this, ...args, child);
   };
 }
 
-// TODO: Use the correct typescript type here
-export function instrumentClass<T extends { prototype: any }>(cls: T): T {
+export function instrumentClass<T extends { prototype: any }>(
+  cls: T,
+  logger: EventGraphLogger
+): T {
+  if (cls.prototype.__instrumentedMethodNames == null) {
+    return cls;
+  }
   for (const key of Object.getOwnPropertyNames(cls.prototype)) {
     if (key == "constructor") {
       continue;
     }
     const eventName = cls.prototype.__instrumentedMethodNames[key];
     if (eventName != null) {
-      cls.prototype[key] = instrumentMethod(eventName, cls.prototype[key]);
+      cls.prototype[key] = instrumentMethod(
+        eventName,
+        cls.prototype[key],
+        logger
+      );
     }
   }
   return cls;
