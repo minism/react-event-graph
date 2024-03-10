@@ -2,6 +2,7 @@
   "name": "@react-event-graph/logger",
   "version": "0.0.1",
   "description": "Logger interface for react-event-graph",
+  "main": "src/index.ts",
   "scripts": {
     "check-compile": "tsc"
   },
