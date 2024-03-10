@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "description": "",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "test": "turbo run test --parallel",
+    "check-compile": "turbo run check-compile"
+  },
+  "dependencies": {
+    "turbo": "latest"
+  },
+  "packageManager": "pnpm@8.15.4"
+}

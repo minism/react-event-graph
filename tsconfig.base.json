@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "module": "CommonJS",
+    "strict": true,
+    "noImplicitReturns": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+    // "baseUrl": ".",
+    // "paths": {
+    //   "@react-event-graph/*": ["./packages/*"]
+    // }
+  },
+  "exclude": ["node_modules"]
+}

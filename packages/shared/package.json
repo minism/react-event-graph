@@ -1,0 +1,12 @@
+{
+  "name": "@react-event-graph/shared",
+  "version": "0.0.1",
+  "description": "Shared code for react-event-graph",
+  "main": "src/index.ts",
+  "scripts": {
+    "check-compile": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.2"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "@react-event-graph/viewer",
+  "version": "0.0.1",
+  "description": "Viewer for react-event-graph",
+  "devDependencies": {
+    "typescript": "^5.4.2"
+  }
+}
