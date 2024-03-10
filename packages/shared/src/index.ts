@@ -45,7 +45,7 @@ export class EventGraphNode implements ISubgraphChangedListener {
   // TODO: Value should be json type.
   public data: Record<string, any> = {};
 
-  private children: EventGraphNode[] = [];
+  public children: EventGraphNode[] = [];
 
   constructor(
     private readonly listener: ISubgraphChangedListener,
