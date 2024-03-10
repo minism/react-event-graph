@@ -4,11 +4,11 @@ import {
   ISubgraphChangedListener,
 } from "@react-event-graph/shared";
 
-export type EventGraphLoggerDestination = (graph: EventGraph) => void;
+export type EventGraphListener = (graph: EventGraph) => void;
 
 export class EventGraphLogger implements ISubgraphChangedListener {
   private graph: EventGraph = new EventGraph(this);
-  private destinations: EventGraphLoggerDestination[] = [];
+  private destinations: EventGraphListener[] = [];
 
   constructor() {
     this.initialize();
@@ -25,7 +25,7 @@ export class EventGraphLogger implements ISubgraphChangedListener {
     this.initialize();
   }
 
-  public addDestination(destination: EventGraphLoggerDestination) {
+  public addListener(destination: EventGraphListener) {
     this.destinations.push(destination);
   }
 

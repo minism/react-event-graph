@@ -6,10 +6,12 @@ function sleep(seconds: number) {
 
 const logger = new EventGraphLogger();
 
-// Print the graph whenever it changes.
-logger.addDestination((graph) => {
-  console.log("Current graph:");
-  console.log(graph.serialize(2));
+// Render the graph whenever it changes.
+logger.addListener((graph) => {
+  console.clear();
+  process.stdout.write("Current graph\n");
+  process.stdout.write(graph.serialize(2));
+  process.stdout.write("\n");
 });
 
 async function main() {
