@@ -1,7 +1,9 @@
-import { EventGraphLogger } from "@react-event-graph/logger";
+import { EventGraphLogger, logMethod } from "@react-event-graph/logger";
+import Controller from "./controller";
+import { sleep } from "./util";
 
-function sleep(seconds: number) {
-  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+async function asyncBareFunction(seconds: number) {
+  await sleep(seconds);
 }
 
 const logger = new EventGraphLogger();
@@ -15,13 +17,14 @@ logger.addListener((graph) => {
 });
 
 async function main() {
-  const root = logger.root("Root");
-  root.attach("data", 5);
-  const child = root.child("Child 1");
-  child.attach("state", "pending");
-  await sleep(1);
-  child.attach("state", "done");
-  child.attach("data", 10);
+  // Wrapping example.
+  // const call1 = logger.wrap("Call 1", asyncCall(0.5));
+  // const call2 = logger.wrap("Call 2", asyncCall(2));
+  // await call2;
+
+  const controller = new Controller();
+  const result = await controller.asyncMethod(0.5);
+  console.log(result);
 }
 
 main().catch(console.error);

@@ -1,1 +1,1 @@
-export { EventGraphLogger } from "./logger";
+export { EventGraphLogger, logMethod } from "./logger";
