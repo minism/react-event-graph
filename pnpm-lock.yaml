@@ -17,6 +17,9 @@ importers:
       '@react-event-graph/logger':
         specifier: workspace:^
         version: link:../packages/logger
+      '@react-event-graph/shared':
+        specifier: workspace:^
+        version: link:../packages/shared
     devDependencies:
       tsx:
         specifier: ^4.7.1

@@ -7,6 +7,7 @@
     "typescript": "^5.4.2"
   },
   "dependencies": {
-    "@react-event-graph/logger": "workspace:^"
+    "@react-event-graph/logger": "workspace:^",
+    "@react-event-graph/shared": "workspace:^"
   }
 }
