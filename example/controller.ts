@@ -18,7 +18,13 @@ class Controller {
   @logMethod()
   async asyncMethod2AutomaticName(seconds: number, ctx?: EventGraphNode) {
     await sleep(seconds);
+    this.method3(ctx);
     return "bar";
+  }
+
+  @logMethod()
+  async method3(ctx?: EventGraphNode) {
+    return "baz";
   }
 }
 

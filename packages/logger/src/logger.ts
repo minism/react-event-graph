@@ -6,29 +6,34 @@ import {
 
 export type EventGraphListener = (graph: EventGraph) => void;
 
-export class EventGraphLogger implements ISubgraphChangedListener {
+export interface IEventGraphContext {
+  wrap<T>(
+    name: string,
+    cb: (ctx: IEventGraphContext) => Promise<T>
+  ): Promise<T>;
+}
+
+export class EventGraphLogger
+  implements ISubgraphChangedListener, IEventGraphContext
+{
   private graph: EventGraph = new EventGraph(this);
+  private rootContext: EventGraphNodeContext;
   private destinations: EventGraphListener[] = [];
 
   constructor() {
-    this.initialize();
+    this.rootContext = new EventGraphNodeContext(this.graph.root);
   }
 
-  /**
-   * Convenience method for logging asynchronous functions to the event graph.
-   *
-   * Stores the promise state in the event node.
-   */
-  public async wrap<T>(name: string, cb: (ctx: EventGraphNode) => Promise<T>) {
-    return wrapFunction(this.root(name), cb);
-  }
-
-  public root(name: string) {
-    return this.graph.root.child(name);
+  public async wrap<T>(
+    eventName: string,
+    cb: (ctx: IEventGraphContext) => Promise<T>
+  ) {
+    return this.rootContext.wrap(eventName, cb);
   }
 
   public clear() {
-    this.initialize();
+    // TODO: Implement
+    // this.initialize();
   }
 
   public addListener(destination: EventGraphListener) {
@@ -40,18 +45,30 @@ export class EventGraphLogger implements ISubgraphChangedListener {
       destination(this.graph);
     }
   }
+}
 
-  private initialize() {
-    this.graph = new EventGraph(this);
+class EventGraphNodeContext implements IEventGraphContext {
+  constructor(public readonly node: EventGraphNode) {}
+
+  async wrap<T>(
+    eventName: string,
+    cb: (ctx: IEventGraphContext) => Promise<T>
+  ): Promise<T> {
+    const child = this.node.child(eventName);
+    child.attach("promise", "pending");
+    try {
+      const result = await cb(new EventGraphNodeContext(child));
+      child.attach("promise", "fulfilled");
+      return result;
+    } catch (e: any) {
+      child.attach("promise", "rejected");
+      throw e;
+    }
   }
 }
 
 export function logMethod(eventName?: string) {
-  return function (
-    target: any,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function (target: any, propertyKey: string) {
     eventName = eventName ?? propertyKey;
     if (target.__instrumentedMethodNames == null) {
       target.__instrumentedMethodNames = {};
@@ -60,36 +77,20 @@ export function logMethod(eventName?: string) {
   };
 }
 
-async function wrapFunction<T>(
-  node: EventGraphNode,
-  cb: (ctx: EventGraphNode) => Promise<T>
-) {
-  node.attach("promise", "pending");
-  try {
-    const result = await cb(node);
-    node.attach("promise", "fulfilled");
-    return result;
-  } catch (e: any) {
-    node.attach("promise", "rejected");
-    throw e;
-  }
-}
-
 function instrumentMethod(
   eventName: string,
   func: Function,
   logger: EventGraphLogger
 ) {
   return function (this: any, ...args: any[]) {
-    const ctx = args[args.length - 1];
-    let node: EventGraphNode;
-    if (typeof ctx == "object" && ctx instanceof EventGraphNode) {
-      args.pop();
-      node = ctx.child(eventName);
+    const arg = args[args.length - 1];
+    let ctx = args.pop() as IEventGraphContext;
+    if (typeof arg == "object" && arg instanceof EventGraphNodeContext) {
+      ctx = arg;
     } else {
-      node = logger.root(eventName);
+      ctx = logger;
     }
-    return node.wrap(eventName, func.call(this, ...args, node));
+    return ctx.wrap(eventName, (c) => func.call(this, ...args, c));
   };
 }
 
