@@ -19,7 +19,7 @@ function visualizeGraph(graph: EventGraph): string {
       .join("\n");
     return `${prefix}- ${node.name} (${node.data.promise})\n${children}`;
   }
-  return graph.rootNodes.map((n) => visualizeNode(n, 0)).join("\n");
+  return visualizeNode(graph.root, 0);
 }
 
 async function main() {

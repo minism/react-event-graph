@@ -3,9 +3,11 @@ export interface ISubgraphChangedListener {
 }
 
 export class EventGraph implements ISubgraphChangedListener {
-  public rootNodes: EventGraphNode[] = [];
+  public root: EventGraphNode;
 
-  public constructor(private readonly listener: ISubgraphChangedListener) {}
+  public constructor(private readonly listener: ISubgraphChangedListener) {
+    this.root = new EventGraphNode(this, "(root)");
+  }
 
   public notify() {
     this.listener.notify();
@@ -25,7 +27,7 @@ export class EventGraph implements ISubgraphChangedListener {
   // TODO: Typing here.
   private dehydrate(): any {
     return {
-      rootNodes: this.rootNodes.map((n) => n.dehydrate()),
+      root: this.root.dehydrate(),
     };
   }
 
@@ -34,9 +36,7 @@ export class EventGraph implements ISubgraphChangedListener {
     data: any
   ): EventGraph {
     const graph = new EventGraph(rootListener);
-    graph.rootNodes = data.rootNodes.map((n: any) =>
-      EventGraphNode.hydrate(graph, n)
-    );
+    graph.root = EventGraphNode.hydrate(graph, data);
     return graph;
   }
 }

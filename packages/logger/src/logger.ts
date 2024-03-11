@@ -24,10 +24,7 @@ export class EventGraphLogger implements ISubgraphChangedListener {
   }
 
   public root(name: string) {
-    const root = new EventGraphNode(this, name);
-    this.graph.rootNodes.push(root);
-    this.notify();
-    return root;
+    return this.graph.root.child(name);
   }
 
   public clear() {
