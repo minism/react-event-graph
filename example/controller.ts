@@ -1,12 +1,14 @@
 import { logMethod } from "@react-event-graph/logger";
+import {
+  IEventGraphContext,
+  instrumentClass,
+} from "@react-event-graph/logger/src/logger";
 import logger from "./logger";
-import { instrumentClass } from "@react-event-graph/logger/src/logger";
 import { sleep } from "./util";
-import { EventGraphNode } from "@react-event-graph/shared";
 
 class Controller {
   @logMethod("publicMethod")
-  async asyncMethod1(seconds: number, ctx?: EventGraphNode) {
+  async asyncMethod1(seconds: number, ctx: IEventGraphContext) {
     await sleep(seconds);
     await Promise.all([
       this.asyncMethod2AutomaticName(1, ctx),
@@ -16,14 +18,14 @@ class Controller {
   }
 
   @logMethod()
-  async asyncMethod2AutomaticName(seconds: number, ctx?: EventGraphNode) {
+  async asyncMethod2AutomaticName(seconds: number, ctx: IEventGraphContext) {
     await sleep(seconds);
     this.method3(ctx);
     return "bar";
   }
 
   @logMethod()
-  async method3(ctx?: EventGraphNode) {
+  async method3(ctx: IEventGraphContext) {
     return "baz";
   }
 }

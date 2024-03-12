@@ -26,14 +26,9 @@ async function main() {
   // Show an example mixing automatic and manually wrapped methods.
   const controller = new Controller();
   const result = await Promise.all([
-    controller.asyncMethod1(0.5),
-    controller.asyncMethod2AutomaticName(1),
-
-    // Calling the function unwrapped still works -- it wont be logged, and
-    // the child calls will be logged as top-level nodes.
-    asyncBareFunction(0.75),
-
-    // Calling the function wrapped will log the graph as expected.
+    controller.asyncMethod1(0.5, logger),
+    controller.asyncMethod2AutomaticName(1, logger),
+    asyncBareFunction(0.75, logger),
     logger.wrap("wrapped", (ctx) => asyncBareFunction(1.5, ctx)),
   ]);
 }

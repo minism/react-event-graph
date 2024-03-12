@@ -83,14 +83,21 @@ function instrumentMethod(
   logger: EventGraphLogger
 ) {
   return function (this: any, ...args: any[]) {
-    const arg = args[args.length - 1];
-    let ctx = args.pop() as IEventGraphContext;
-    if (typeof arg == "object" && arg instanceof EventGraphNodeContext) {
-      ctx = arg;
+    const lastArg = args[args.length - 1];
+    let ctx: IEventGraphContext = logger;
+    if (
+      typeof lastArg == "object" &&
+      (lastArg instanceof EventGraphNodeContext ||
+        lastArg instanceof EventGraphLogger)
+    ) {
+      ctx = lastArg;
+      args.pop();
     } else {
       ctx = logger;
     }
-    return ctx.wrap(eventName, (c) => func.call(this, ...args, c));
+    return ctx.wrap(eventName, (c) => {
+      return func.call(this, ...args, c);
+    });
   };
 }
 

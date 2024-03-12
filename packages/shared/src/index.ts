@@ -52,24 +52,6 @@ export class EventGraphNode implements ISubgraphChangedListener {
     public readonly name: string
   ) {}
 
-  /**
-   * Convenience method for logging asynchronous functions to the event graph.
-   *
-   * Stores the promise state in the event node.
-   */
-  public async wrap<T>(name: string, promise: Promise<T>) {
-    const node = this.child(name);
-    node.attach("promise", "pending");
-    try {
-      const result = await promise;
-      node.attach("promise", "fulfilled");
-      return result;
-    } catch (e: any) {
-      node.attach("promise", "rejected");
-      throw e;
-    }
-  }
-
   public child(name: string) {
     const node = new EventGraphNode(this, name);
     this.children.push(node);

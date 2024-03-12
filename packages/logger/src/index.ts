@@ -1,1 +1,1 @@
-export { EventGraphLogger, logMethod } from "./logger";
+export { EventGraphLogger, logMethod, IEventGraphContext } from "./logger";
