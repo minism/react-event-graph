@@ -8,10 +8,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-    // "baseUrl": ".",
-    // "paths": {
-    //   "@react-event-graph/*": ["./packages/*"]
-    // }
   },
   "exclude": ["node_modules"]
 }

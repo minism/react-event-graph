@@ -1,5 +1,5 @@
 {
-  "name": "example",
+  "name": "example-node",
   "private": true,
   "main": "index.ts",
   "devDependencies": {

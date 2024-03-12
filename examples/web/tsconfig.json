@@ -1,0 +1,10 @@
+{
+  "extends": ["../../tsconfig.base.json"],
+  "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "jsx": "react-jsx",
+    "noEmit": false,
+    "experimentalDecorators": true
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}

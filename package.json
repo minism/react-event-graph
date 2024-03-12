@@ -11,7 +11,7 @@
     "lint:fix": "turbo run lint:fix",
     "test": "turbo run test --parallel",
     "check-compile": "turbo run check-compile",
-    "run-example": "(cd example && pnpm tsx index.ts)"
+    "run-example": "(cd examples/node && pnpm tsx index.ts)"
   },
   "dependencies": {
     "turbo": "latest"
