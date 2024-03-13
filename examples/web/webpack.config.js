@@ -1,3 +1,4 @@
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
 module.exports = {
@@ -11,9 +12,12 @@ module.exports = {
       },
     ],
   },
+  plugins: [new HtmlWebpackPlugin()],
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
   },
+  resolve: { extensions: [".ts", ".tsx", ".js"] },
+
   devtool: "inline-source-map",
 };

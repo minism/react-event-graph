@@ -1,11 +1,16 @@
-import { captureStackTrace, sleep } from "./shared";
+import { MyContext } from "./context";
+import { sleep } from "./shared";
 
-export async function file2Func() {
+export async function file2Func(ctx: MyContext) {
   await sleep(1);
-  await Promise.all([file2InnerFunc(), file2InnerFunc()]);
+  ctx.span!.setAttribute("asdofijdsoaif", 12);
+  await Promise.all([
+    ctx.withSpan("foo", () => file2InnerFunc()),
+    ctx.withSpan("bar", () => file2InnerFunc()),
+  ]);
 }
 
 async function file2InnerFunc() {
-  console.dir(captureStackTrace());
+  // console.dir(captureStackTrace());
   await sleep(1);
 }
