@@ -3,15 +3,7 @@ import {
   EventGraphNode,
   ISubgraphChangedListener,
 } from "@react-event-graph/shared";
-
-export type EventGraphListener = (graph: EventGraph) => void;
-
-export interface IEventGraphContext {
-  wrap<T>(
-    name: string,
-    cb: (ctx: IEventGraphContext) => Promise<T>
-  ): Promise<T>;
-}
+import { EventGraphListener } from "./listener";
 
 export class EventGraphLogger
   implements ISubgraphChangedListener, IEventGraphContext
