@@ -1,21 +1,17 @@
+import { ZoneContextManager } from "@opentelemetry/context-zone";
 import {
-  ConsoleSpanExporter,
   SimpleSpanProcessor,
   WebTracerProvider,
 } from "@opentelemetry/sdk-trace-web";
-import { DocumentLoadInstrumentation } from "@opentelemetry/instrumentation-document-load";
-import { ZoneContextManager } from "@opentelemetry/context-zone";
-import { registerInstrumentations } from "@opentelemetry/instrumentation";
+import { ReactViewSpanExporter } from "./exporter";
 
-export const provider = new WebTracerProvider();
-
-provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
-
+export const exporter = new ReactViewSpanExporter();
+const provider = new WebTracerProvider();
+provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
 provider.register({
   // Changing default contextManager to use ZoneContextManager - supports asynchronous operations - optional
   contextManager: new ZoneContextManager(),
 });
-
 // Registering instrumentations
 // registerInstrumentations({
 //   instrumentations: [new DocumentLoadInstrumentation()],

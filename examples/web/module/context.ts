@@ -15,8 +15,13 @@ export class MyContext {
     // behaviors, but we don't need this ourselves, since we
     return api.context.with(context, () => {
       try {
+        span.setAttribute("promise", "pending");
         return cb(new MyContext(context, span));
+      } catch (e: any) {
+        span.setAttribute("promise", "rejected");
+        throw e;
       } finally {
+        span.setAttribute("promise", "fulfilled");
         span.end();
       }
     });

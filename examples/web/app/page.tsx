@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { rootContext } from "../module/context";
 import { file1Func } from "../module/file1";
 import { file2Func } from "../module/file2";
+import SpanTreeView from "../components/SpanTreeView";
 
 export default function Home() {
   useEffect(() => {
@@ -11,5 +12,10 @@ export default function Home() {
     })();
   }, []);
 
-  return <div>Hi</div>;
+  return (
+    <div>
+      Spans:
+      <SpanTreeView />
+    </div>
+  );
 }
